@@ -3,25 +3,28 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-function drawFlowField() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const spacing = 20;
-    for (let y = 0; y < canvas.height; y += spacing) {
-        for (let x = 0; x < canvas.width; x += spacing) {
-            const angle = Math.random() * Math.PI * 2;
-            const length = 10 + Math.random() * 10;
-            ctx.beginPath();
-            ctx.moveTo(x, y);
-            ctx.lineTo(x + Math.cos(angle) * length, y + Math.sin(angle) * length);
-            ctx.strokeStyle = `rgba(0,0,0,0.2)`;
-            ctx.lineWidth = 1;
-            ctx.stroke();
-        }
+const stars = Array.from({ length: 300 }, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    size: Math.random() * 2,
+    speed: Math.random() * 0.5 + 0.2
+}));
+
+function draw() {
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "white";
+    for (let star of stars) {
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+        ctx.fill();
+        star.x -= star.speed;
+        if (star.x < 0) star.x = canvas.width;
     }
+    requestAnimationFrame(draw);
 }
 
-drawFlowField();
-canvas.addEventListener("click", drawFlowField);
+draw();
 
 
 
