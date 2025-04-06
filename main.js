@@ -1,41 +1,32 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
-canvas.height = canvas.height = window.innerHeight;
+canvas.height = window.innerHeight;
 
-const colors = ["white", "black", "red", "blue", "yellow"];
+let t = 0;
 
-function drawMondriaan() {
-    ctx.fillStyle = "white";
+function drawWave() {
+    ctx.fillStyle = "rgba(0,0,0,0.1)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    const step = 100;
-    for (let x = 0; x < canvas.width; x += step) {
+
+    for (let i = 0; i < 5; i++) {
         ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvas.height);
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = 4;
-        ctx.stroke();
-    }
-    for (let y = 0; y < canvas.height; y += step) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y);
+        ctx.moveTo(0, canvas.height / 2);
+        for (let x = 0; x < canvas.width; x++) {
+            const y = canvas.height / 2 + Math.sin(x * 0.01 + t + i) * 30 * (i + 1);
+            ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = `hsl(${(t * 10 + i * 40) % 360}, 100%, 60%)`;
+        ctx.lineWidth = 2;
         ctx.stroke();
     }
 
-    for (let i = 0; i < 30; i++) {
-        const x = Math.floor(Math.random() * canvas.width / step) * step;
-        const y = Math.floor(Math.random() * canvas.height / step) * step;
-        const w = step * (1 + Math.floor(Math.random() * 3));
-        const h = step * (1 + Math.floor(Math.random() * 3));
-        ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
-        ctx.fillRect(x, y, w, h);
-    }
+    t += 0.02;
+    requestAnimationFrame(drawWave);
 }
 
-drawMondriaan();
-canvas.addEventListener("click", drawMondriaan);
+drawWave();
+
 
 
 
