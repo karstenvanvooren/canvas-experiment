@@ -3,24 +3,19 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-function randomColor() {
-    return `hsl(${Math.random() * 360}, 100%, 50%)`;
-}
-
-function drawCircles() {
+function drawLines() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const count = 200;
-    for (let i = 0; i < count; i++) {
-        const x = Math.random() * canvas.width;
-        const y = Math.random() * canvas.height;
-        const radius = Math.random() * 40;
+    for (let i = 0; i < 500; i++) {
         ctx.beginPath();
-        ctx.arc(x, y, radius, 0, Math.PI * 2);
-        ctx.fillStyle = randomColor();
-        ctx.fill();
+        ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+        ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+        ctx.strokeStyle = `rgba(${Math.floor(Math.random()*255)}, ${Math.floor(Math.random()*255)}, ${Math.floor(Math.random()*255)}, 0.2)`;
+        ctx.lineWidth = Math.random() * 2;
+        ctx.stroke();
     }
 }
 
-drawCircles();
-canvas.addEventListener("click", drawCircles);
+drawLines();
+canvas.addEventListener("click", drawLines);
+
 
