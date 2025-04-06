@@ -3,29 +3,30 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-let t = 0;
+let targets = [];
 
-function drawWave() {
-    ctx.fillStyle = "rgba(0,0,0,0.1)";
+canvas.addEventListener("click", (e) => {
+    targets.push({ x: e.clientX, y: e.clientY, r: 0 });
+});
+
+function draw() {
+    ctx.fillStyle = "rgba(0,0,0,0.2)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    for (let i = 0; i < 5; i++) {
+    targets.forEach(t => {
         ctx.beginPath();
-        ctx.moveTo(0, canvas.height / 2);
-        for (let x = 0; x < canvas.width; x++) {
-            const y = canvas.height / 2 + Math.sin(x * 0.01 + t + i) * 30 * (i + 1);
-            ctx.lineTo(x, y);
-        }
-        ctx.strokeStyle = `hsl(${(t * 10 + i * 40) % 360}, 100%, 60%)`;
-        ctx.lineWidth = 2;
+        ctx.arc(t.x, t.y, t.r, 0, Math.PI * 2);
+        ctx.strokeStyle = `hsl(${t.r * 10 % 360}, 100%, 50%)`;
+        ctx.lineWidth = 4;
         ctx.stroke();
-    }
+        t.r += 2;
+    });
 
-    t += 0.02;
-    requestAnimationFrame(drawWave);
+    targets = targets.filter(t => t.r < 100);
+    requestAnimationFrame(draw);
 }
 
-drawWave();
+draw();
 
 
 
